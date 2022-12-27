@@ -1,0 +1,11 @@
+.center, conversor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 64px);
+  width: 100%;
+}
+
+.center {
+  background-color: lightblue;
+}
