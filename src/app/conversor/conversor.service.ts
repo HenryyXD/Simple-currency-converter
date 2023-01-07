@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap, first, catchError, of } from 'rxjs';
+import { tap, first, catchError, of, Observable, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConversorService {
+  private readonly API: string = 'https://economia.awesomeapi.com.br';
 
-  private readonly API: string = '/assets/currencies.json';
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  getMoedas() {
-    return this.http.get(this.API).pipe(
-
-    );
+  getConversao(moedaFrom: string, moedaTo: string) {
+    let requestUrl = `${this.API}/json/last/${moedaFrom}-${moedaTo}`;
+    return this.http.get(requestUrl);
   }
 }

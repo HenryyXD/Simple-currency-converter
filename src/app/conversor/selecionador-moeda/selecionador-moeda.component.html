@@ -1,12 +1,19 @@
 <mat-form-field appearance="outline">
   <mat-label>Moeda</mat-label>
-  <mat-select [(value)]="moedaSelecionada">
-    <mat-option *ngFor="let key of objectkeys(moedas)" [value]="key">
+  <mat-select
+    [(value)]="moedaSelecionada"
+    (selectionChange)="emitMoedaSelecionadaChange($event.value)"
+  >
+    <mat-option
+      style="display: flex; align-items: center"
+      *ngFor="let key of objectkeys(moedas)"
+      [value]="key"
+    >
       {{ key }} - {{ moedas[key] }}
     </mat-option>
   </mat-select>
 </mat-form-field>
 
 <mat-form-field appearance="fill">
-  <input matInput type="number" [(ngModel)]="moedaQtd"/>
+  <input matInput type="text" [(ngModel)]="moedaQtd" [readonly]="readonly" />
 </mat-form-field>

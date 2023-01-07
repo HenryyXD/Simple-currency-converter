@@ -4,7 +4,12 @@
       <div class="grid-item">
         <div class="grid grid-selecionador">
           <div class="grid-item">
-            <selecionador-moeda moedaSelecionada="USD" moedaQtd="1"></selecionador-moeda>
+            <selecionador-moeda
+              moedaSelecionada="USD"
+              [moedaQtd]="1"
+              (moedaSelecionadaOnChange)="doConversao()"
+              #readComponent
+            ></selecionador-moeda>
           </div>
           <div class="grid-item">
             <button mat-icon-button>
@@ -12,7 +17,13 @@
             </button>
           </div>
           <div class="grid-item">
-            <selecionador-moeda moedaSelecionada="BRL"></selecionador-moeda>
+            <selecionador-moeda
+              #resultComponent
+              moedaSelecionada="BRL"
+              [moedaQtd]="moedaResult"
+              [readonly]="true"
+              (moedaSelecionadaOnChange)="doConversao()"
+            ></selecionador-moeda>
           </div>
         </div>
       </div>
