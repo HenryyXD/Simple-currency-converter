@@ -5,10 +5,11 @@
         <div class="grid grid-selecionador">
           <div class="grid-item">
             <selecionador-moeda
+              #readComponent
               moedaSelecionada="USD"
               [moedaQtd]="1"
-              (moedaSelecionadaOnChange)="doConversao()"
-              #readComponent
+              (moedaSelecionadaChange)="getConversaoAndSetToBuyPrice()"
+              (moedaQtdChange)="doConversao()"
             ></selecionador-moeda>
           </div>
           <div class="grid-item">
@@ -20,9 +21,9 @@
             <selecionador-moeda
               #resultComponent
               moedaSelecionada="BRL"
-              [moedaQtd]="moedaResult"
+              [moedaQtd]="resultInputValue"
               [readonly]="true"
-              (moedaSelecionadaOnChange)="doConversao()"
+              (moedaSelecionadaChange)="getConversaoAndSetToBuyPrice()"
             ></selecionador-moeda>
           </div>
         </div>

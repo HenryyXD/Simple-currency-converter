@@ -15,5 +15,5 @@
 </mat-form-field>
 
 <mat-form-field appearance="fill">
-  <input matInput type="text" [(ngModel)]="moedaQtd" [readonly]="readonly" />
+  <input matInput type="text" [(ngModel)]="moedaQtd" [readonly]="readonly" (input)="emitMoedaQtdChange($event)" />
 </mat-form-field>

@@ -15,7 +15,8 @@ export class SelecionadorMoedaComponent {
   @Input() moedaSelecionada = '';
   @Input() moedaQtd: number = 0;
   @Input() readonly: boolean = false;
-  @Output() moedaSelecionadaOnChange = new EventEmitter<string>();
+  @Output() moedaSelecionadaChange = new EventEmitter<string>();
+  @Output() moedaQtdChange = new EventEmitter<number>();
 
   objectkeys = Object.keys;
 
@@ -24,6 +25,10 @@ export class SelecionadorMoedaComponent {
   }
 
   emitMoedaSelecionadaChange(moeda: MatSelectChange) {
-    this.moedaSelecionadaOnChange.emit(moeda.toString());
+    this.moedaSelecionadaChange.emit(moeda.toString());
+  }
+
+  emitMoedaQtdChange(moedaQtd: Event) {
+    this.moedaQtdChange.emit(+(moedaQtd.target as HTMLInputElement).value);
   }
 }
