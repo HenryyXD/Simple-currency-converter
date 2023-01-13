@@ -22,11 +22,6 @@ export class ConversorComponent {
   }
 
   doConversao() {
-    if (this.ehConversaoDaMesmaMoeda()) {
-      this.igualarValoresDosInputs();
-      return;
-    }
-
     this.resultInputValue = this.multiplicaBuyPricePorMoedaQtd();
   }
 
@@ -38,11 +33,16 @@ export class ConversorComponent {
   }
 
   igualarValoresDosInputs() {
-    console.log(this.readComponent)
     this.resultInputValue = this.readComponent.moedaQtd;
   }
 
   getConversaoAndSetToBuyPrice() {
+    if (this.ehConversaoDaMesmaMoeda()) {
+      this.buyPrice = 1;
+      this.doConversao();
+      return;
+    }
+
     this.conversorService.getConversao(
       this.readComponent.moedaSelecionada,
       this.resultComponent.moedaSelecionada
