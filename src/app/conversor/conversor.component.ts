@@ -36,19 +36,13 @@ export class ConversorComponent {
   }
 
   getConversaoAndSetToBuyPrice() {
-    if (this.readComponent.moedaSelecionada === this.resultComponent.moedaSelecionada) {
-      this.buyPrice = 1;
-      return;
-    }
-
     this.conversorService
       .getConversao(
         this.readComponent.moedaSelecionada,
         this.resultComponent.moedaSelecionada
       )
       .subscribe((r: any) => {
-        let attrNomeConversao = Object.keys(r)[0];
-        this.buyPrice = r[attrNomeConversao].bid;
+        this.buyPrice = r.bid;
       });
   }
 

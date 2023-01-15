@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import conversionsJSON from './../../assets/conversions.json';
-import { of } from 'rxjs';
+import { map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +13,20 @@ export class ConversorService {
   constructor(private http: HttpClient) {}
 
   getConversao(moedaFrom: string, moedaTo: string) {
+
+    if (moedaFrom === moedaTo) {
+      return of({
+        bid: 1,
+      });
+    }
+
     let nome = this.procurarNomeConversao(moedaFrom, moedaTo);
     if (!nome) return of([]);
+
     let requestUrl = `${this.API}/json/last/${nome}`;
-    return this.http.get(requestUrl);
+    return this.http
+      .get(requestUrl)
+      .pipe(map((res: any) => res[Object.keys(res)[0]]));
   }
 
   procurarNomeConversao(moedaFrom: string, moedaTo: string): string {
