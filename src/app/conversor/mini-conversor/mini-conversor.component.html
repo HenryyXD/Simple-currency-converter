@@ -1,3 +1,22 @@
 <mat-card>
-  <mat-card-content>Simple card</mat-card-content>
+  <mat-card-content>
+    <mat-form-field appearance="fill" class="mat-select-content">
+      <mat-label>Outras Conversões</mat-label>
+      <mat-select [formControl]="formControl" multiple (selectionChange)="moedaSelecionadaChange($event)">
+        <mat-option *ngFor="let moeda of objectkeys(moedas)" [value]="moeda">
+          {{ moeda }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <table>
+      <tr>
+        <th>Moeda</th>
+        <th>Preço</th>
+      </tr>
+      <tr *ngFor="let moeda of moedasSelecionadas">
+        <td>{{ moeda }}</td>
+      </tr>
+    </table>
+  </mat-card-content>
 </mat-card>

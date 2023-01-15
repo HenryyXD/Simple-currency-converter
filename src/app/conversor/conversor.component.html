@@ -29,12 +29,7 @@
         </div>
       </div>
       <div class="grid-item align-start border-box">
-        <div *ngIf="moedasMiniConversor.length > 0">
-          <mini-conversor *ngFor="let moeda of moedasMiniConversor" [moedaSelecionada]="moeda" ></mini-conversor>
-        </div>
-        <button mat-fab color="warn" class="btn-add" (click)="addMiniConversor()">
-          <mat-icon>add</mat-icon>
-        </button>
+        <mini-conversor></mini-conversor>
       </div>
     </div>
   </mat-card-content>

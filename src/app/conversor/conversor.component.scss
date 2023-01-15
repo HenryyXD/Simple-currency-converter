@@ -1,9 +1,13 @@
 mat-card {
   width: 80%;
-  border: 1px solid gray;
+  border: 1px solid black;
+  background-color: #eeeeee;
   border-radius: 10px;
   min-width: 800px;
   max-width: 1200px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
 
   mat-card-content {
     padding: 0;
@@ -18,11 +22,9 @@ mat-card {
 
 .grid-card-container {
   grid-template-columns: 70% 30%;
-  height: 300px;
 }
 
 .grid-item {
-  padding: 5px 10px;
   font-size: 30px;
   text-align: center;
   width: 100%;
@@ -43,4 +45,5 @@ mat-card {
 .btn-add {
   margin-top: 10px;
 }
+
 
