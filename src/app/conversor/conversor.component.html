@@ -9,7 +9,7 @@
               moedaSelecionada="USD"
               [moedaQtd]="1"
               (moedaSelecionadaChange)="getConversaoAndSetToBuyPrice()"
-              (moedaQtdChange)="doConversao()"
+              (moedaQtdChange)="calculateAndSetResultValue()"
             ></selecionador-moeda>
           </div>
           <div class="grid-item">
@@ -28,7 +28,14 @@
           </div>
         </div>
       </div>
-      <div class="grid-item"></div>
+      <div class="grid-item align-start border-box">
+        <div *ngIf="moedasMiniConversor.length > 0">
+          <mini-conversor *ngFor="let moeda of moedasMiniConversor" [moedaSelecionada]="moeda" ></mini-conversor>
+        </div>
+        <button mat-fab color="warn" class="btn-add" (click)="addMiniConversor()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>

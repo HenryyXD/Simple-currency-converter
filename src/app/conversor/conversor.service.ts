@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap, first, catchError, of, Observable, Subject } from 'rxjs';
+import conversionsJSON from './../../assets/conversions.json';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,10 +9,30 @@ import { tap, first, catchError, of, Observable, Subject } from 'rxjs';
 export class ConversorService {
   private readonly API: string = 'https://economia.awesomeapi.com.br';
 
+  private conversions: { [key: string]: string } = conversionsJSON;
   constructor(private http: HttpClient) {}
 
   getConversao(moedaFrom: string, moedaTo: string) {
-    let requestUrl = `${this.API}/json/last/${moedaFrom}-${moedaTo}`;
+    let nome = this.procurarNomeConversao(moedaFrom, moedaTo);
+    if (!nome) return of([]);
+    let requestUrl = `${this.API}/json/last/${nome}`;
     return this.http.get(requestUrl);
+  }
+
+  procurarNomeConversao(moedaFrom: string, moedaTo: string): string {
+    let nome = '';
+    let nameToSearch = `${moedaFrom}-${moedaTo}`;
+    let nameToSearchReversed = `${moedaTo}-${moedaFrom}`;
+    Object.keys(this.conversions).some((key: string) => {
+      if (nameToSearch === key) {
+        nome = nameToSearch;
+      } else if (nameToSearchReversed === key) {
+        nome = nameToSearchReversed;
+      } else {
+        return false;
+      }
+      return true;
+    });
+    return nome;
   }
 }

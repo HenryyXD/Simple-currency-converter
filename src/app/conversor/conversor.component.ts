@@ -13,47 +13,46 @@ export class ConversorComponent {
   @ViewChild('resultComponent') resultComponent!: SelecionadorMoedaComponent;
 
   resultInputValue: number = 0;
-  buyPrice: number = 0;
+  private _buyPrice: number = 0;
+  moedasMiniConversor: string[] = ['BRL', 'USD'];
 
-  constructor(private conversorService: ConversorService) {
-    setTimeout(() => {
-      this.getConversaoAndSetToBuyPrice();
-    }, 100);
+  constructor(private conversorService: ConversorService) {  }
+
+  ngAfterViewInit() {
+    this.getConversaoAndSetToBuyPrice();
   }
 
-  doConversao() {
-    this.resultInputValue = this.multiplicaBuyPricePorMoedaQtd();
+  get buyPrice() {
+    return this._buyPrice;
   }
 
-  ehConversaoDaMesmaMoeda() {
-    return (
-      this.readComponent.moedaSelecionada ===
-      this.resultComponent.moedaSelecionada
-    );
+  set buyPrice(value: number) {
+    this._buyPrice = value;
+    this.calculateAndSetResultValue();
   }
 
-  igualarValoresDosInputs() {
-    this.resultInputValue = this.readComponent.moedaQtd;
+  calculateAndSetResultValue() {
+    this.resultInputValue = this.buyPrice * this.readComponent.moedaQtd;
   }
 
   getConversaoAndSetToBuyPrice() {
-    if (this.ehConversaoDaMesmaMoeda()) {
+    if (this.readComponent.moedaSelecionada === this.resultComponent.moedaSelecionada) {
       this.buyPrice = 1;
-      this.doConversao();
       return;
     }
 
-    this.conversorService.getConversao(
-      this.readComponent.moedaSelecionada,
-      this.resultComponent.moedaSelecionada
-    ).subscribe((r: any) => {
-      let attrNomeConversao = Object.keys(r)[0];
-      this.buyPrice = r[attrNomeConversao].bid;
-      this.resultInputValue = this.multiplicaBuyPricePorMoedaQtd(); // nao era pra estar aqui (funcao faz 2 coisas ta errado)
-    });
+    this.conversorService
+      .getConversao(
+        this.readComponent.moedaSelecionada,
+        this.resultComponent.moedaSelecionada
+      )
+      .subscribe((r: any) => {
+        let attrNomeConversao = Object.keys(r)[0];
+        this.buyPrice = r[attrNomeConversao].bid;
+      });
   }
 
-  multiplicaBuyPricePorMoedaQtd() {
-    return this.buyPrice * +this.readComponent.moedaQtd;
+  addMiniConversor() {
+
   }
 }

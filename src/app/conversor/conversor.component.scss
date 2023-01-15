@@ -32,3 +32,15 @@ mat-card {
   grid-template-columns: 40% 10% 40%;
 }
 
+.align-start {
+  align-self: flex-start;
+}
+
+.border-box {
+  box-sizing: border-box;
+}
+
+.btn-add {
+  margin-top: 10px;
+}
+
