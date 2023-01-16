@@ -19,7 +19,9 @@ export class MiniConversorComponent {
   set moedaFrom(moeda: string) {
     this._moedaFrom = moeda;
     this.buyPriceCache = [];
-    console.log(this.formControl);
+    if(this.formControl.value) {
+      this.moedaSelecionadaChange(this.formControl);
+    }
   }
 
   get moedaFrom(): string {
@@ -32,7 +34,6 @@ export class MiniConversorComponent {
   constructor(private conversorService: ConversorService) {}
 
   moedaSelecionadaChange({ value }: any) {
-    console.log(JSON.stringify(value));
     this.moedasSelecionadas = [];
     value.forEach((moedaKey: string) => {
       let index = this.buyPriceCache.findIndex(
@@ -53,7 +54,7 @@ export class MiniConversorComponent {
           this.moedasSelecionadas[nextIndex] = { [moedaKey]: res.bid };
         });
 
-      this.moedasSelecionadas[nextIndex] = { [moedaKey]: 1 };
+      this.moedasSelecionadas[nextIndex] = { [moedaKey]: 0 };
     });
   }
 }

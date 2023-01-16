@@ -16,7 +16,7 @@
       </tr>
       <tr *ngFor="let moeda of moedasSelecionadas">
         <td>{{ objectkeys(moeda)[0] }}</td>
-        <td>{{ moeda[objectkeys(moeda)[0]] }}</td>
+        <td>{{ moeda[objectkeys(moeda)[0]] || '' }}</td>
       </tr>
     </table>
   </mat-card-content>
