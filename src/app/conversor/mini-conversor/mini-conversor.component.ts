@@ -10,17 +10,50 @@ import moedasJson from './../../../assets/currencies.json';
   styleUrls: ['./mini-conversor.component.scss'],
 })
 export class MiniConversorComponent {
+  private _moedaFrom = '';
   formControl = new FormControl('');
-  moedasSelecionadas: string[] = [];
-  @Input() moedaFrom: string = 'USD';
+  moedasSelecionadas: { [key: string]: number }[] = [];
+  buyPriceCache: { [key: string]: number }[] = [];
+
+  @Input()
+  set moedaFrom(moeda: string) {
+    this._moedaFrom = moeda;
+    this.buyPriceCache = [];
+    console.log(this.formControl);
+  }
+
+  get moedaFrom(): string {
+    return this._moedaFrom;
+  }
+
   moedas = moedasJson;
   objectkeys = Object.keys;
 
-  constructor(private conversorService: ConversorService) {
-  }
-
+  constructor(private conversorService: ConversorService) {}
 
   moedaSelecionadaChange({ value }: any) {
-    this.moedasSelecionadas = value;
+    console.log(JSON.stringify(value));
+    this.moedasSelecionadas = [];
+    value.forEach((moedaKey: string) => {
+      let index = this.buyPriceCache.findIndex(
+        (obj: { [key: string]: number }) =>
+          Object.keys(obj).toString() === moedaKey
+      );
+
+      if (index !== -1) {
+        this.moedasSelecionadas.push(this.buyPriceCache[index]);
+        return;
+      }
+
+      let nextIndex = this.moedasSelecionadas.length;
+
+      this.conversorService.getConversao(this.moedaFrom, moedaKey)
+        .subscribe((res: any) => {
+          this.buyPriceCache.push({ [moedaKey]: +res.bid });
+          this.moedasSelecionadas[nextIndex] = { [moedaKey]: res.bid };
+        });
+
+      this.moedasSelecionadas[nextIndex] = { [moedaKey]: 1 };
+    });
   }
 }

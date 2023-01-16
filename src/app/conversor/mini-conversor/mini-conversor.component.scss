@@ -20,6 +20,8 @@ mat-card {
   border-bottom-right-radius: 10px;
   mat-card-content {
     padding: 0;
+    max-height: 100%;
+    overflow: auto;
   }
 }
 
@@ -34,6 +36,7 @@ table {
   font-size: 14px;
   border-collapse: collapse;
   font-family: Roboto;
+  overflow-y: auto;
 }
 
 tr:not(:first-child) {
