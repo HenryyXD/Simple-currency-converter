@@ -1,4 +1,7 @@
 # ConversorMoedas
+#### Aplicativo Angular simples de conversor de moedas. Feito 4fun e para fixar conceitos aprendidos do Angular, meu foco de estudo atual.
+#### API Usada: [https://docs.awesomeapi.com.br/api-de-moedas](https://docs.awesomeapi.com.br/api-de-moedas)
+#
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.3.
 
