@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 
-import { ConversorService } from '../conversor.service';
 import moedasJson from './../../../assets/currencies.json';
-
 
 @Component({
   selector: 'selecionador-moeda',
@@ -11,18 +9,23 @@ import moedasJson from './../../../assets/currencies.json';
   styleUrls: ['./selecionador-moeda.component.scss'],
 })
 export class SelecionadorMoedaComponent {
+  objectkeys = Object.keys;
+  private _moedaQtd: string | number = 0;
   moedas: { [key: string]: any } = moedasJson;
   @Input() moedaSelecionada = '';
-  @Input() moedaQtd: number = 0;
   @Input() readonly: boolean = false;
   @Output() moedaSelecionadaChange = new EventEmitter<string>();
   @Output() moedaQtdChange = new EventEmitter<number>();
 
-  objectkeys = Object.keys;
+  @Input() get moedaQtd(): (number | string) {
+    return this._moedaQtd;
+  };
 
-  constructor(private conversorService: ConversorService) {
-
+  set moedaQtd(value: string | number) {
+    this._moedaQtd = +value.toString().replace(',', '.');
   }
+
+  constructor() {}
 
   emitMoedaSelecionadaChange(moeda: MatSelectChange) {
     this.moedaSelecionadaChange.emit(moeda.toString());

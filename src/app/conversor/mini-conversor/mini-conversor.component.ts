@@ -14,12 +14,16 @@ export class MiniConversorComponent {
   formControl = new FormControl('');
   moedasSelecionadas: { [key: string]: number }[] = [];
   buyPriceCache: { [key: string]: number }[] = [];
+  moedas = moedasJson;
+  objectkeys = Object.keys;
+
+  @Input() moedaQtd: number | string = 0;
 
   @Input()
   set moedaFrom(moeda: string) {
     this._moedaFrom = moeda;
     this.buyPriceCache = [];
-    if(this.formControl.value) {
+    if (this.formControl.value) {
       this.moedaSelecionadaChange(this.formControl);
     }
   }
@@ -27,9 +31,6 @@ export class MiniConversorComponent {
   get moedaFrom(): string {
     return this._moedaFrom;
   }
-
-  moedas = moedasJson;
-  objectkeys = Object.keys;
 
   constructor(private conversorService: ConversorService) {}
 
@@ -47,14 +48,14 @@ export class MiniConversorComponent {
       }
 
       let nextIndex = this.moedasSelecionadas.length;
-
-      this.conversorService.getConversao(this.moedaFrom, moedaKey)
+      this.moedasSelecionadas[nextIndex] = { [moedaKey]: 0 };
+      this.conversorService
+        .getConversao(this.moedaFrom, moedaKey)
         .subscribe((res: any) => {
           this.buyPriceCache.push({ [moedaKey]: +res.bid });
-          this.moedasSelecionadas[nextIndex] = { [moedaKey]: res.bid };
+          if(!this.moedasSelecionadas[nextIndex]) return;
+          this.moedasSelecionadas[nextIndex] = { [moedaKey]: +res.bid };
         });
-
-      this.moedasSelecionadas[nextIndex] = { [moedaKey]: 0 };
     });
   }
 }

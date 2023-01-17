@@ -1,5 +1,7 @@
+import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import localePt from '@angular/common/locales/pt';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +17,9 @@ import { AppComponent } from './app.component';
 import { ConversorComponent } from './conversor/conversor.component';
 import { MiniConversorComponent } from './conversor/mini-conversor/mini-conversor.component';
 import { SelecionadorMoedaComponent } from './conversor/selecionador-moeda/selecionador-moeda.component';
+import { ToNumberPipe } from './shared/to-number.pipe';
+
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
@@ -22,6 +27,7 @@ import { SelecionadorMoedaComponent } from './conversor/selecionador-moeda/selec
     ConversorComponent,
     SelecionadorMoedaComponent,
     MiniConversorComponent,
+    ToNumberPipe
   ],
   imports: [
     BrowserModule,
@@ -35,9 +41,14 @@ import { SelecionadorMoedaComponent } from './conversor/selecionador-moeda/selec
     HttpClientModule,
     MatButtonModule,
     MatTableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: LOCALE_ID,
+      useValue: 'pt',
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

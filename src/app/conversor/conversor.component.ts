@@ -12,11 +12,11 @@ export class ConversorComponent {
   @ViewChild('readComponent') readComponent!: SelecionadorMoedaComponent;
   @ViewChild('resultComponent') resultComponent!: SelecionadorMoedaComponent;
 
-  resultInputValue: number = 0;
+  resultInputValue: number | string = 0;
   private _buyPrice: number = 0;
   moedasMiniConversor: string[] = ['BRL', 'USD'];
 
-  constructor(private conversorService: ConversorService) {  }
+  constructor(private conversorService: ConversorService) {}
 
   ngAfterViewInit() {
     this.getConversaoAndSetToBuyPrice();
@@ -32,7 +32,7 @@ export class ConversorComponent {
   }
 
   calculateAndSetResultValue() {
-    this.resultInputValue = this.buyPrice * this.readComponent.moedaQtd;
+    this.resultInputValue = this.buyPrice * +this.readComponent.moedaQtd;
   }
 
   getConversaoAndSetToBuyPrice() {
@@ -44,9 +44,5 @@ export class ConversorComponent {
       .subscribe((r: any) => {
         this.buyPrice = r.bid;
       });
-  }
-
-  addMiniConversor() {
-
   }
 }

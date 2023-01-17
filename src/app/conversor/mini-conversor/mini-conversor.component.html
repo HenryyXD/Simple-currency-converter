@@ -2,7 +2,11 @@
   <mat-card-content>
     <mat-form-field appearance="fill" class="mat-select-content">
       <mat-label>Outras Conversões</mat-label>
-      <mat-select [formControl]="formControl" multiple (selectionChange)="moedaSelecionadaChange($event)">
+      <mat-select
+        [formControl]="formControl"
+        multiple
+        (selectionChange)="moedaSelecionadaChange($event)"
+      >
         <mat-option *ngFor="let moeda of objectkeys(moedas)" [value]="moeda">
           <span>{{ moeda }}</span>
         </mat-option>
@@ -16,7 +20,12 @@
       </tr>
       <tr *ngFor="let moeda of moedasSelecionadas">
         <td>{{ objectkeys(moeda)[0] }}</td>
-        <td>{{ moeda[objectkeys(moeda)[0]] || '' }}</td>
+        <td>
+          {{
+            moeda[objectkeys(moeda)[0]] * (moedaQtd | toNumber) || ""
+            | currency : objectkeys(moeda)[0] : "symbol-narrow"
+          }}
+        </td>
       </tr>
     </table>
   </mat-card-content>

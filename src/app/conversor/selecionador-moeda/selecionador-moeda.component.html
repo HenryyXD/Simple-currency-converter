@@ -15,5 +15,10 @@
 </mat-form-field>
 
 <mat-form-field appearance="fill">
-  <input matInput type="text" [(ngModel)]="moedaQtd" [readonly]="readonly" (input)="emitMoedaQtdChange($event)" />
+  <div *ngIf="readonly;else notParsedInput">
+    <input matInput type="text" [ngModel]="moedaQtd | toNumber | number:'1.0-3'" (ngModelChange)="moedaQtd=$event" [readonly]="readonly" (input)="emitMoedaQtdChange($event)" />
+  </div>
+  <ng-template #notParsedInput>
+    <input matInput type="text" [(ngModel)]="moedaQtd" [readonly]="readonly" (input)="emitMoedaQtdChange($event)" />
+  </ng-template>
 </mat-form-field>
