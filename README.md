@@ -1,5 +1,5 @@
 # ConversorMoedas
-#### Aplicativo Angular simples de conversor de moedas. Feito 4fun e para fixar conceitos de aprendizado do Angular, meu foco de estudo atual.
+#### Aplicativo Angular simples de conversor de moedas. Feito 4fun e para fixar conceitos aprendidos do Angular, meu foco de estudo atual.
 #### API Usada: [https://docs.awesomeapi.com.br/api-de-moedas](https://docs.awesomeapi.com.br/api-de-moedas)
 #
 
