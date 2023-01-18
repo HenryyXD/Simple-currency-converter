@@ -17,24 +17,30 @@ export class ConversorService {
   getConversao(moedaFrom: string, moedaTo: string): Observable<any> {
     if (moedaFrom === moedaTo) {
       return of({
-        bid: 1
+        bid: 1,
       });
     }
 
     let nome = this.procurarNomeConversao(moedaFrom, moedaTo);
     if (!nome && moedaFrom !== 'USD' && moedaTo !== 'USD') {
       return this.getConversaoAproximada(moedaFrom, moedaTo);
-    } else if(!nome) {
+    } else if (!nome) {
       return of([]); // nao existe conversao
     }
 
+    if (this.moedasCache[nome]) {
+      return of(this.moedasCache[nome]);
+    }
+
     let requestUrl = `${this.API}/json/last/${nome}`;
-    return this.http
-      .get(requestUrl)
-      .pipe(
-        tap((res: any) => console.log(res)),
-        map((res: any) => res[Object.keys(res)[0]])
-      );
+    this.moedasCache[nome] = {};
+    return this.http.get(requestUrl).pipe(
+      map((res: any) => {
+        let moedaKey = Object.keys(res)[0];
+        this.moedasCache[nome] = res[moedaKey];
+        return res[moedaKey];
+      })
+    );
   }
 
   procurarNomeConversao(moedaFrom: string, moedaTo: string): string {
@@ -51,6 +57,7 @@ export class ConversorService {
       }
       return true;
     });
+
     return nome;
   }
 
