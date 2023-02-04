@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import conversionsJSON from './../../assets/conversions.json';
-import { map, Observable, of, forkJoin, tap } from 'rxjs';
+import { map, Observable, of, forkJoin, tap, shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -22,13 +22,14 @@ export class ConversorService {
     }
 
     let nome = this.procurarNomeConversao(moedaFrom, moedaTo);
+
     if (!nome && moedaFrom !== 'USD' && moedaTo !== 'USD') {
       return this.getConversaoAproximada(moedaFrom, moedaTo);
     } else if (!nome) {
       return of([]); // nao existe conversao
     }
 
-    if (this.moedasCache[nome]) {
+    if (this.moedasCache[nome] && Object.keys(this.moedasCache[nome]).length) {
       return of(this.moedasCache[nome]);
     }
 

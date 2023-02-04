@@ -13,7 +13,6 @@ export class MiniConversorComponent {
   private _moedaFrom = '';
   formControl = new FormControl('');
   moedasSelecionadas: { [key: string]: number }[] = [];
-  //buyPriceCache: { [key: string]: number }[] = [];
   moedas = moedasJson;
   objectkeys = Object.keys;
 
@@ -22,7 +21,6 @@ export class MiniConversorComponent {
   @Input()
   set moedaFrom(moeda: string) {
     this._moedaFrom = moeda;
-    //this.buyPriceCache = [];
     if (this.formControl.value) {
       this.moedaSelecionadaChange(this.formControl);
     }
@@ -37,22 +35,11 @@ export class MiniConversorComponent {
   moedaSelecionadaChange({ value }: any) {
     this.moedasSelecionadas = [];
     value.forEach((moedaKey: string) => {
-      // let index = this.buyPriceCache.findIndex(
-      //   (obj: { [key: string]: number }) =>
-      //     Object.keys(obj).toString() === moedaKey
-      // );
-
-      // if (index !== -1) {
-      //   this.moedasSelecionadas.push(this.buyPriceCache[index]);
-      //   return;
-      // }
-
       let nextIndex = this.moedasSelecionadas.length;
       this.moedasSelecionadas[nextIndex] = { [moedaKey]: 0 };
       this.conversorService
         .getConversao(this.moedaFrom, moedaKey)
         .subscribe((res: any) => {
-          //if(res.bid) this.buyPriceCache.push({ [moedaKey]: +res.bid });
           if(!this.moedasSelecionadas[nextIndex]) return;
           this.moedasSelecionadas[nextIndex] = { [moedaKey]: +res.bid };
         });
