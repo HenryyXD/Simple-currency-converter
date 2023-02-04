@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import conversionsJSON from './../../assets/conversions.json';
-import { map, Observable, of, forkJoin, tap, shareReplay } from 'rxjs';
+import { map, Observable, of, forkJoin, shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class ConversorService {
   private conversions: { [key: string]: string } = conversionsJSON;
   constructor(private http: HttpClient) {}
 
-  private moedasCache: { [key: string]: {} } = {};
+  private moedasCache: { [key: string]: Observable<any> } = {};
 
   getConversao(moedaFrom: string, moedaTo: string): Observable<any> {
     if (moedaFrom === moedaTo) {
@@ -21,30 +21,30 @@ export class ConversorService {
       });
     }
 
-    let nome = this.procurarNomeConversao(moedaFrom, moedaTo);
+    let nome = this.encontrarNomeDaConversao(moedaFrom, moedaTo);
 
     if (!nome && moedaFrom !== 'USD' && moedaTo !== 'USD') {
-      return this.getConversaoAproximada(moedaFrom, moedaTo);
+      return this.calcularConversaoAproximada(moedaFrom, moedaTo);
     } else if (!nome) {
       return of([]); // nao existe conversao
     }
 
-    if (this.moedasCache[nome] && Object.keys(this.moedasCache[nome]).length) {
-      return of(this.moedasCache[nome]);
+    let requestUrl = `${this.API}/json/last/${nome}`;
+
+    if(!this.moedasCache[nome]) {
+      this.moedasCache[nome] = this.http.get(requestUrl).pipe(
+        map((res: any) => {
+          let moedaKey = Object.keys(res)[0];
+          return res[moedaKey];
+        }),
+        shareReplay(1)
+      );
     }
 
-    let requestUrl = `${this.API}/json/last/${nome}`;
-    this.moedasCache[nome] = {};
-    return this.http.get(requestUrl).pipe(
-      map((res: any) => {
-        let moedaKey = Object.keys(res)[0];
-        this.moedasCache[nome] = res[moedaKey];
-        return res[moedaKey];
-      })
-    );
+    return this.moedasCache[nome];
   }
 
-  procurarNomeConversao(moedaFrom: string, moedaTo: string): string {
+  encontrarNomeDaConversao(moedaFrom: string, moedaTo: string): string {
     let nome = '';
     let nameToSearch = `${moedaFrom}-${moedaTo}`;
     let nameToSearchReversed = `${moedaTo}-${moedaFrom}`;
@@ -79,7 +79,7 @@ export class ConversorService {
   //ou indireta entre as moedas A e C, dependendo das taxas de câmbio entre as moedas B e C, pode
   //haver uma diferença significativa.
   //Fonte: ChatGPT :)
-  getConversaoAproximada(moedaFrom: string, moedaTo: string) {
+  calcularConversaoAproximada(moedaFrom: string, moedaTo: string) {
     let taxaA = this.getConversao(moedaFrom, 'USD');
     let taxaB = this.getConversao(moedaTo, 'USD');
 
